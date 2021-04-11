@@ -1,0 +1,30 @@
+const pokedex = document.getElementById('pokedex');
+const pokeCache = {};
+const fetchPokemon = async () => {
+    const url = `https://pokeapi.co/api/v2/item?limit=954`;
+	const res = await fetch(url);
+	const data = await res.json();
+	console.log(data)
+	const pokemon = data.results.map((result, index) => ({
+		...result,
+		id: index + 1,
+		image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${result.name}.png`
+		}));
+	displayPokemon(pokemon);
+};
+
+const displayPokemon = (pokemon) => {
+    const pokemonHTMLString = pokemon
+        .map(
+            (pokeman) => `
+        <li class="card">
+            <img class="card-image" src="${pokeman.image}"/>
+            <h2 class="card-title">${pokeman.id}. ${pokeman.name}</h2>
+        </li>
+    `
+        )
+        .join('');
+    pokedex.innerHTML = pokemonHTMLString;
+};
+
+fetchPokemon();
